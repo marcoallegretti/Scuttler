@@ -18,3 +18,13 @@ add_test(NAME cli COMMAND tst_cli)
 set_tests_properties(cli PROPERTIES TIMEOUT 60)
 
 add_test(NAME qmllint COMMAND Qt6::qmllint --max-warnings 0 ${PROJECT_SOURCE_DIR}/main.qml)
+
+option(SCUTTLER_WAYLAND_TESTS "Run Scuttler under a headless cage compositor" OFF)
+if(SCUTTLER_WAYLAND_TESTS)
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+    find_program(CAGE_EXECUTABLE cage REQUIRED)
+    add_test(NAME wayland-smoke
+        COMMAND Python3::Interpreter ${CMAKE_CURRENT_SOURCE_DIR}/wayland_smoke.py
+            $<TARGET_FILE:scuttler> ${CAGE_EXECUTABLE})
+    set_tests_properties(wayland-smoke PROPERTIES TIMEOUT 180)
+endif()

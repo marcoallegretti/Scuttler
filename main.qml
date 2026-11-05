@@ -16,6 +16,28 @@ ApplicationWindow {
 
         anchors.fill: parent
         url: window.initialUrl
+
+        onLoadingChanged: function(loadingInfo) {
+            if (loadingInfo.status === WebEngineLoadingInfo.LoadStartedStatus) {
+                retry.stop()
+            } else if (loadingInfo.status === WebEngineLoadingInfo.LoadFailedStatus) {
+                console.warn(loadingInfo.errorString)
+                if (loadingInfo.errorDomain === WebEngineLoadingInfo.ConnectionErrorDomain)
+                    retry.restart()
+            }
+        }
+
+        onRenderProcessTerminated: function(terminationStatus, exitCode) {
+            console.warn("Web content process terminated, status", terminationStatus, "exit code", exitCode)
+            retry.restart()
+        }
+    }
+
+    Timer {
+        id: retry
+
+        interval: 1000
+        onTriggered: webView.reload()
     }
 
     ProgressBar {

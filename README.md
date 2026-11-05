@@ -22,6 +22,8 @@ Agama treats only `localhost` and `127.0.0.0/8` as local connections.
 
 The window covers the whole screen unless `--windowed` is given.
 
+The page is reloaded after its web content process terminates, and after
+connection errors, so Scuttler can start before the Agama web server listens.
 Cookies and the HTTP cache are kept in memory only. Downloads and new windows
 are not supported.
 
@@ -43,6 +45,10 @@ cmake --build build
 ctest --test-dir build
 cmake --install build
 ```
+
+With `-DSCUTTLER_WAYLAND_TESTS=ON`, the tests also run Scuttler in a headless
+[cage](https://github.com/cage-kiosk/cage) session, which needs cage and
+Python 3.
 
 ## License
 
