@@ -49,7 +49,8 @@ drop-downs at once on Wayland
 on high-density displays.
 
 Enable it with `systemctl enable --force scuttler.service`, which replaces
-another display manager.
+another display manager. The `scuttler-kiosk` package in
+`packaging/scuttler.spec` installs it.
 
 ## Building
 
