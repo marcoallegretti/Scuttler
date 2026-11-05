@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2026 Marco Allegretti
+# SPDX-License-Identifier: EUPL-1.2
+
+[Unit]
+Description=Agama installer web UI
+After=agama-web-server.service systemd-user-sessions.service plymouth-quit-wait.service getty@tty1.service
+BindsTo=agama-web-server.service
+Conflicts=getty@tty1.service
+ConditionPathExists=/dev/tty0
+StartLimitIntervalSec=0
+
+[Service]
+User=scuttler
+PAMName=scuttler
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=yes
+StandardInput=tty-fail
+StandardOutput=journal
+StandardError=journal
+UtmpIdentifier=tty1
+UtmpMode=user
+RuntimeDirectory=scuttler
+RuntimeDirectoryMode=0700
+LoadCredential=agama-token:/run/agama/token
+Environment=XDG_CONFIG_DIRS=/usr/share/scuttler/xdg:/etc/xdg
+# Qt WebEngine closes form popups at once on Wayland (QTBUG-147154).
+ExecStart=/usr/bin/kwin_wayland --drm --xwayland --no-lockscreen --no-global-shortcuts --no-kactivities --locale1 --exit-with-session "/usr/bin/scuttler -platform xcb"
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=graphical.target
+Alias=display-manager.service

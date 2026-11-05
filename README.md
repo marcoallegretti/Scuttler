@@ -33,6 +33,24 @@ list, so do not pass the token that way.
 Qt WebEngine's Chromium sandbox does not work as root; run Scuttler as an
 unprivileged user.
 
+## Installer session
+
+`session/` contains a systemd service that runs Scuttler as the display manager
+of an Agama live image. It starts KWin on the first virtual terminal as the
+unprivileged `scuttler` user, through a logind session, and passes the Agama
+token as the `agama-token` credential. KWin follows the keyboard layout that
+Agama sets through localed. The service is bound to `agama-web-server.service`,
+so a new web server, and with it a new token, starts a new session. The
+session has no D-Bus session bus, and with it no accessibility bus.
+
+Scuttler runs on Xwayland in this session, because Qt WebEngine closes form
+drop-downs at once on Wayland
+([QTBUG-147154](https://bugreports.qt.io/browse/QTBUG-147154)). KWin scales it
+on high-density displays.
+
+Enable it with `systemctl enable --force scuttler.service`, which replaces
+another display manager.
+
 ## Building
 
 Requirements: CMake 3.21, a C++17 compiler, and Qt 6.11 or newer with Qt

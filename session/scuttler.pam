@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2026 Marco Allegretti
+# SPDX-License-Identifier: EUPL-1.2
+
+auth     required pam_rootok.so
+account  required pam_unix.so no_pass_expiry
+session  required pam_selinux.so close
+session  required pam_selinux.so nottys open
+session  required pam_loginuid.so
+session  optional pam_keyinit.so force revoke
+session  include  common-session
