@@ -10,7 +10,8 @@ Version:        0.1.0
 Release:        0
 Summary:        Qt WebEngine shell for the Agama installer web UI
 License:        BSD-3-Clause AND EUPL-1.2
-Source0:        %{name}-%{version}.tar.gz
+URL:            https://github.com/marcoallegretti/Scuttler
+Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildRequires:  cmake >= 3.21
 BuildRequires:  gcc-c++
 BuildRequires:  pam-devel
@@ -51,7 +52,7 @@ first virtual terminal, as the display manager of an Agama installer image.
 KWin follows the keyboard layout that Agama sets through localed.
 
 %prep
-%autosetup
+%autosetup -n Scuttler-%{version}
 
 %build
 %sysusers_generate_pre session/scuttler.sysusers scuttler scuttler.conf
